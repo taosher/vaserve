@@ -35,6 +35,7 @@ jobs:
     name: Publish to crates.io
     needs: build-and-test
     runs-on: ubuntu-latest
+    environment: crates.io
     steps:
       - uses: actions/checkout@v4
 
