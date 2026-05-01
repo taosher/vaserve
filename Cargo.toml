@@ -1,6 +1,6 @@
 [package]
 name = "vaserve"
-version = "14.2.4"
+version = "1.0.0"
 edition = "2021"
 description = "Static file serving and directory listing - a Rust clone of vercel/serve"
 license = "MIT"
