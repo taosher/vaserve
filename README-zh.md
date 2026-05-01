@@ -1,8 +1,8 @@
-# serve-rs
+# vaserve
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**serve-rs 是 [vercel/serve](https://github.com/vercel/serve) 的 Rust 版本。**
+**vaserve 是 [vercel/serve](https://github.com/vercel/serve) 的 Rust 版本。**
 静态文件服务与目录列表 — CLI 参数和配置与原版 vercel/serve 完全兼容。
 
 ## 用户故事
@@ -12,34 +12,40 @@
 ### serve 解决了什么问题？
 
 1. **"我只想看看构建产物的效果"**
-   你刚跑完 `npm run build`，生成了 `dist/` 文件夹。直接双击打开 `index.html` 文件会有问题——相对路径挂掉、`/api` 请求无响应、前端路由依赖 HTTP 服务器环境。`serve dist/` 一条命令就能给你一个功能完备的服务器。
+   你刚跑完 `npm run build`，生成了 `dist/` 文件夹。直接双击打开 `index.html` 文件会有问题——相对路径挂掉、`/api` 请求无响应、前端路由依赖 HTTP 服务器环境。`vaserve dist/` 一条命令就能给你一个功能完备的服务器。
 
 2. **"我需要测试 SPA 的前端路由"**
-   你的 React/Vue/Svelte 应用使用了客户端路由（`/about`、`/dashboard`）。直接用文件协议访问只能看到 `index.html` 一个页面。使用 `serve -s dist/`，所有未找到的路由都会 rewrite 到 `index.html`——和生产环境完全一致。
+   你的 React/Vue/Svelte 应用使用了客户端路由（`/about`、`/dashboard`）。直接用文件协议访问只能看到 `index.html` 一个页面。使用 `vaserve -s dist/`，所有未找到的路由都会 rewrite 到 `index.html`——和生产环境完全一致。
 
 3. **"我想在局域网里分享文件"**
-   你有一些截图、文档或构建产物要分享给同事。`serve` 秒级启动，自动把 URL 复制到剪贴板，加上 `-C` 开启 CORS 后同事可以直接访问——零配置。
+   你有一些截图、文档或构建产物要分享给同事。`vaserve` 秒级启动，自动把 URL 复制到剪贴板，加上 `-C` 开启 CORS 后同事可以直接访问——零配置。
 
 4. **"我不想为了一个静态服务器装 Node.js"**
-   原版 `serve` 需要 Node.js、npm 以及几百个传递依赖。你工作在 Rust 生态中——或者你只是想要一个单独的、小巧的二进制文件。`serve-rs` 是即插即用的替代品：相同的 CLI、相同的 `serve.json` 配置、相同的行为。用 `serve` 替代 `npx serve`。
+   原版 `serve` 需要 Node.js、npm 以及几百个传递依赖。你工作在 Rust 生态中——或者你只是想要一个单独的、小巧的二进制文件。`vaserve` 是即插即用的替代品：相同的 CLI、相同的 `serve.json` 配置、相同的行为。用 `vaserve` 替代 `npx serve`。
 
 5. **"我需要在 CI/CD 或 Docker 里运行静态服务"**
-   一个静态链接的独立二进制文件，无运行时依赖，极小体积。`serve dist/` 可以在任何 Rust 能编译的平台上运行——Linux、macOS、Windows、ARM。可以放到 `FROM scratch` 的 Docker 镜像里、CI 流水线中，或者在树莓派上运行。
+   一个静态链接的独立二进制文件，无运行时依赖，极小体积。`vaserve dist/` 可以在任何 Rust 能编译的平台上运行——Linux、macOS、Windows、ARM。可以放到 `FROM scratch` 的 Docker 镜像里、CI 流水线中，或者在树莓派上运行。
 
 ## 安装
+
+### 从 crates.io 安装
+
+```bash
+cargo install vaserve
+```
 
 ### 从源码编译
 
 ```bash
-git clone https://github.com/your-org/serve-rs.git
-cd serve-rs
+git clone https://github.com/taosher/vaserve.git
+cd vaserve
 cargo build --release
 ```
 
-编译产物在 `target/release/serve`，拷贝到 `$PATH` 目录即可：
+编译产物在 `target/release/vaserve`，拷贝到 `$PATH` 目录即可：
 
 ```bash
-cp target/release/serve /usr/local/bin/
+cp target/release/vaserve /usr/local/bin/
 ```
 
 ### 环境要求
@@ -50,34 +56,34 @@ cp target/release/serve /usr/local/bin/
 
 ```bash
 # 在当前目录启动，默认监听 3000 端口
-serve
+vaserve
 
 # 指定文件夹
-serve build/
+vaserve build/
 
 # 自定义端口
-serve -l 8080
+vaserve -l 8080
 
 # SPA 模式（所有路由 rewrite 到 index.html）
-serve -s dist/
+vaserve -s dist/
 
 # 开启 CORS
-serve -C
+vaserve -C
 
 # 多地址监听
-serve -l 3000 -l 3001
+vaserve -l 3000 -l 3001
 ```
 
 ## 使用说明
 
 ```
-$ serve --help
-$ serve --version
-$ serve folder_name
-$ serve [-l listen_uri [-l ...]] [directory]
+$ vaserve --help
+$ vaserve --version
+$ vaserve folder_name
+$ vaserve [-l listen_uri [-l ...]] [directory]
 ```
 
-默认情况下，serve 监听 `0.0.0.0:3000` 并提供当前工作目录的服务。
+默认情况下，vaserve 监听 `0.0.0.0:3000` 并提供当前工作目录的服务。
 
 ## CLI 选项
 
@@ -105,16 +111,16 @@ $ serve [-l listen_uri [-l ...]] [directory]
 
 ```bash
 # 仅端口（默认绑定 0.0.0.0）
-serve -l 1234
+vaserve -l 1234
 
 # 指定主机的 TCP
-serve -l tcp://hostname:1234
+vaserve -l tcp://hostname:1234
 
 # 主机:端口
-serve -l 127.0.0.1:3000
+vaserve -l 127.0.0.1:3000
 
 # 多地址
-serve -l tcp://0.0.0.0:3000 -l tcp://0.0.0.0:3001
+vaserve -l tcp://0.0.0.0:3000 -l tcp://0.0.0.0:3001
 ```
 
 ## serve.json 配置

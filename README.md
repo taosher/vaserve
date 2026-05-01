@@ -1,8 +1,8 @@
-# serve-rs
+# vaserve
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**serve-rs 是 [vercel/serve](https://github.com/vercel/serve) 的 Rust 版本。**
+**vaserve 是 [vercel/serve](https://github.com/vercel/serve) 的 Rust 版本。**
 Static file serving and directory listing — API-compatible with all CLI arguments and configuration of the original vercel/serve.
 
 ## User Story
@@ -12,34 +12,40 @@ Static file serving and directory listing — API-compatible with all CLI argume
 ### What Problems Does serve Solve?
 
 1. **"I just want to see what my build output looks like"**
-   You've run `npm run build` and have a `dist/` folder. Opening `index.html` directly in the browser breaks — relative paths fail, API calls to `/api` return nothing, and routing relies on an HTTP server context. `serve dist/` gives you a fully working server in one command.
+   You've run `npm run build` and have a `dist/` folder. Opening `index.html` directly in the browser breaks — relative paths fail, API calls to `/api` return nothing, and routing relies on an HTTP server context. `vaserve dist/` gives you a fully working server in one command.
 
 2. **"I need to test my SPA routing"**
-   Your React/Vue/Svelte app uses client-side routing (`/about`, `/dashboard`). Direct file access can only serve `index.html`. With `serve -s dist/`, every not-found route rewrites to `index.html` — just like production.
+   Your React/Vue/Svelte app uses client-side routing (`/about`, `/dashboard`). Direct file access can only serve `index.html`. With `vaserve -s dist/`, every not-found route rewrites to `index.html` — just like production.
 
 3. **"I want to share files on my local network"**
-   You have screenshots, documents, or build artifacts to share with teammates. `serve` starts in seconds, copies the URL to your clipboard, and with `-C` enables CORS so your colleagues can access everything with zero config.
+   You have screenshots, documents, or build artifacts to share with teammates. `vaserve` starts in seconds, copies the URL to your clipboard, and with `-C` enables CORS so your colleagues can access everything with zero config.
 
 4. **"I want to avoid Node.js dependency overhead"**
-   The original `serve` pulls in Node.js, npm, and hundreds of transient dependencies. You're working in a Rust ecosystem — or you simply want a single, tiny binary. `serve-rs` is a drop-in replacement: same CLI, same `serve.json` config, same behavior. Substitute `npx serve` with `serve`.
+   The original `serve` pulls in Node.js, npm, and hundreds of transient dependencies. You're working in a Rust ecosystem — or you simply want a single, tiny binary. `vaserve` is a drop-in replacement: same CLI, same `serve.json` config, same behavior. Substitute `npx serve` with `vaserve`.
 
 5. **"I need a static server in CI/CD or a Docker container"**
-   A single statically-linked binary with no runtime dependencies and a tiny footprint. `serve dist/` works anywhere Rust compiles — Linux, macOS, Windows, ARM. Deploy it in a `FROM scratch` Docker image, drop it into a CI pipeline, or run it on a Raspberry Pi.
+   A single statically-linked binary with no runtime dependencies and a tiny footprint. `vaserve dist/` works anywhere Rust compiles — Linux, macOS, Windows, ARM. Deploy it in a `FROM scratch` Docker image, drop it into a CI pipeline, or run it on a Raspberry Pi.
 
 ## Installation
+
+### From crates.io
+
+```bash
+cargo install vaserve
+```
 
 ### From Source
 
 ```bash
-git clone https://github.com/your-org/serve-rs.git
-cd serve-rs
+git clone https://github.com/taosher/vaserve.git
+cd vaserve
 cargo build --release
 ```
 
-The binary will be at `target/release/serve`. Copy it to a directory in your `$PATH`:
+The binary will be at `target/release/vaserve`. Copy it to a directory in your `$PATH`:
 
 ```bash
-cp target/release/serve /usr/local/bin/
+cp target/release/vaserve /usr/local/bin/
 ```
 
 ### Requirements
@@ -50,34 +56,34 @@ cp target/release/serve /usr/local/bin/
 
 ```bash
 # Serve the current directory on port 3000
-serve
+vaserve
 
 # Serve a specific folder
-serve build/
+vaserve build/
 
 # Custom port
-serve -l 8080
+vaserve -l 8080
 
 # SPA mode (rewrite all routes to index.html)
-serve -s dist/
+vaserve -s dist/
 
 # With CORS
-serve -C
+vaserve -C
 
 # Multiple endpoints
-serve -l 3000 -l 3001
+vaserve -l 3000 -l 3001
 ```
 
 ## Usage
 
 ```
-$ serve --help
-$ serve --version
-$ serve folder_name
-$ serve [-l listen_uri [-l ...]] [directory]
+$ vaserve --help
+$ vaserve --version
+$ vaserve folder_name
+$ vaserve [-l listen_uri [-l ...]] [directory]
 ```
 
-By default, serve listens on `0.0.0.0:3000` and serves the current working directory.
+By default, vaserve listens on `0.0.0.0:3000` and serves the current working directory.
 
 ## CLI Options
 
@@ -105,16 +111,16 @@ By default, serve listens on `0.0.0.0:3000` and serves the current working direc
 
 ```bash
 # Simple port (defaults to 0.0.0.0)
-serve -l 1234
+vaserve -l 1234
 
 # TCP with host
-serve -l tcp://hostname:1234
+vaserve -l tcp://hostname:1234
 
 # Host:port
-serve -l 127.0.0.1:3000
+vaserve -l 127.0.0.1:3000
 
 # Multiple endpoints
-serve -l tcp://0.0.0.0:3000 -l tcp://0.0.0.0:3001
+vaserve -l tcp://0.0.0.0:3000 -l tcp://0.0.0.0:3001
 ```
 
 ## serve.json Configuration

@@ -3,21 +3,21 @@ use clap::Parser;
 /// Static file serving and directory listing
 #[derive(Parser, Debug, Clone)]
 #[command(
-    name = "serve",
+    name = "vaserve",
     about = "Static file serving and directory listing",
     disable_help_flag = true,
     disable_version_flag = true,
     after_help = "ENDPOINTS\n\n\
-        Listen endpoints (specified by the --listen or -l options above) instruct serve\n\
+        Listen endpoints (specified by the --listen or -l options above) instruct vaserve\n\
         to listen on one or more interfaces/ports, UNIX domain sockets, or Windows named pipes.\n\
         \n\
-        For TCP ports on hostname \"localhost\":\n\n          $ serve -l 1234\n\
+        For TCP ports on hostname \"localhost\":\n\n          $ vaserve -l 1234\n\
         \n\
-        For TCP (traditional host/port) endpoints:\n\n          $ serve -l tcp://hostname:1234\n\
+        For TCP (traditional host/port) endpoints:\n\n          $ vaserve -l tcp://hostname:1234\n\
         \n\
-        For UNIX domain socket endpoints:\n\n          $ serve -l unix:/path/to/socket.sock\n\
+        For UNIX domain socket endpoints:\n\n          $ vaserve -l unix:/path/to/socket.sock\n\
         \n\
-        For Windows named pipe endpoints:\n\n          $ serve -l pipe:\\\\.\\pipe\\PipeName"
+        For Windows named pipe endpoints:\n\n          $ vaserve -l pipe:\\\\.\\pipe\\PipeName"
 )]
 pub struct CliArgs {
     /// Show help message
@@ -98,16 +98,16 @@ pub fn parse_args() -> CliArgs {
 }
 
 pub fn print_help() {
-    println!(r#"serve - Static file serving and directory listing
+    println!(r#"vaserve - Static file serving and directory listing
 
   USAGE
 
-    $ serve --help
-    $ serve --version
-    $ serve folder_name
-    $ serve [-l listen_uri [-l ...]] [directory]
+    $ vaserve --help
+    $ vaserve --version
+    $ vaserve folder_name
+    $ vaserve [-l listen_uri [-l ...]] [directory]
 
-    By default, serve will listen on 0.0.0.0:3000 and serve the
+    By default, vaserve will listen on 0.0.0.0:3000 and serve the
     current working directory on that address.
 
     Specifying a single --listen argument will overwrite the default, not supplement it.
@@ -116,7 +116,7 @@ pub fn print_help() {
 
     --help                              Shows this help message
 
-    -v, --version                       Displays the current version of serve
+    -v, --version                       Displays the current version of vaserve
 
     -l, --listen listen_uri             Specify a URI endpoint on which to listen (see below) -
                                         more than one may be specified to listen in multiple places

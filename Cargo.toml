@@ -6,7 +6,7 @@ description = "Static file serving and directory listing - a Rust clone of verce
 license = "MIT"
 
 [[bin]]
-name = "serve"
+name = "vaserve"
 path = "src/main.rs"
 
 [dependencies]
